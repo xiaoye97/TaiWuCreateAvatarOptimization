@@ -20,8 +20,12 @@ namespace TaiWuCreateAvatarOptimization
         public static Dictionary<string, Sprite> NormalCache;
         public static Dictionary<string, Sprite> BigCache;
 
+        /// <summary>
+        /// Mod被关闭
+        /// </summary>
         public override void Dispose()
         {
+            // Mod被关闭时取消Patch
             if (harmony != null)
             {
                 harmony.UnpatchSelf();
@@ -29,15 +33,20 @@ namespace TaiWuCreateAvatarOptimization
             }
         }
 
+        /// <summary>
+        /// Mod初始化
+        /// </summary>
         public override void Initialize()
         {
             SmallCache = new Dictionary<string, Sprite>();
             NormalCache = new Dictionary<string, Sprite>();
             BigCache = new Dictionary<string, Sprite>();
             harmony = Harmony.CreateAndPatchAll(typeof(CreateAvatarOptimization));
+            // 延迟1秒搜索资源，延迟主要是为了等待其他Mod开启完毕，这样才能搜索到其他Mod下的图片素材。
             DelayMono.DelayDo(SearchAssets, 1f);
         }
 
+        #region 替换原图
         [HarmonyPostfix, HarmonyPatch(typeof(AvatarAtlasAssets), "GetSpriteArray")]
         public static void AvatarAtlasAssets_GetSpriteArray(AvatarAtlasAssets __instance, byte avatarId, string spriteName, ref Sprite[] __result)
         {
@@ -105,6 +114,7 @@ namespace TaiWuCreateAvatarOptimization
                 }
             }
         }
+        #endregion
 
         /// <summary>
         /// 搜索资源
@@ -149,6 +159,7 @@ namespace TaiWuCreateAvatarOptimization
                         var smallPNGs = smallDir.GetFiles("*.png");
                         var normalPNGs = normalDir.GetFiles("*.png");
                         var bigPNGs = bigDir.GetFiles("*.png");
+                        // 遍历并加载图片
                         if (smallPNGs != null && smallPNGs.Length > 0)
                         {
                             foreach (var file in smallPNGs)
