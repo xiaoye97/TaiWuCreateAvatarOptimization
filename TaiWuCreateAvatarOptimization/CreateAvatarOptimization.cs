@@ -9,7 +9,7 @@ using GameData.Domains.Character.AvatarSystem;
 
 namespace TaiWuCreateAvatarOptimization
 {
-    [PluginConfig("TaiWuCreateAvatarOptimization", "宵夜97", "1.0.0")]
+    [PluginConfig("TaiWuCreateAvatarOptimization", "宵夜97", "1.1.0")]
     public class CreateAvatarOptimization : TaiwuRemakePlugin
     {
         private Harmony harmony;
@@ -222,7 +222,7 @@ namespace TaiWuCreateAvatarOptimization
                         byte[] array = new byte[fileStream.Length];
                         fileStream.Read(array, 0, array.Length);
                         fileStream.Close();
-                        Texture2D texture2D = new Texture2D(1024, 1024);
+                        Texture2D texture2D = new Texture2D(1024, 1024, TextureFormat.ARGB32, false);
                         texture2D.LoadImage(array);
                         return Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height), Vector2.zero);
                     }
