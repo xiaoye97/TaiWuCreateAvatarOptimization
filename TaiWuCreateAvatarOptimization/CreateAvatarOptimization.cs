@@ -129,7 +129,7 @@ namespace TaiWuCreateAvatarOptimization
             foreach (var enabledMod in ModManager.EnabledMods)
             {
                 var info = ModManager.GetModInfo(enabledMod);
-                var path = ModManager.GetModPath(info);
+                var path = info.DirectoryName;
                 DirectoryInfo modDir = new DirectoryInfo(path);
                 if (modDir.Exists)
                 {
